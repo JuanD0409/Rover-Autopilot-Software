@@ -90,3 +90,43 @@ FUNCTION controlSpeed {
         SET SHIP:CONTROL:WHEELTHROTTLE TO 0.1
     }
 }
+
+FUNCTION executePointTurn {
+    PARAMETER targetGeo.
+
+    PRINT "Heading error is greater than 5 degrees. Initiating point-turn...".
+
+    // 1. Completely stop the rover.
+    SET SHIP:CONTROL:WHEELTHROTTLE TO 0.
+    BRAKES ON. 
+    WAIT UNTIL SHIP:VELOCITY:SURFACE:MAG < 0.05.
+    
+    // 2. Turn the front and rear wheels 45 degrees using robotic servos controlled by a Kal-1000 toggled by two action groups.
+    AG1 ON. // Set action group 1 to set to normal and activate the Kal-1000 that steers the wheels...
+    AG2 OFF. // and action group 2 to reverse the Kal-1000 activate it, returning the wheels to "drive mode".
+    WAIT 5. // The time the program pauses while the wheels turn can be changed.
+    BRAKES OFF.
+
+    // 3. Rotate the rover until it's aligned within 1 degree of target heading.
+    UNTIL ABS(targetGeo:BEARING) < 1 {
+        IF targetGeo:BEARING > 0 {
+            SET SHIP:CONTROL:WHEELTHROTTLE TO 0.5. // Rover spins clockwise
+        } ELSE {
+            SET SHIP:CONTROL:WHEELTHROTTLE TO -0.5. // Rover spins counter-clockwise.
+        }
+        WAIT 0.05.
+    }
+
+    // 4. Stop the rover's rotation.
+    SET SHIP:CONTROL:WHEELTHROTTLE TO 0.
+    BRAKES ON.
+    WAIT UNTIL SHIP:VELOCITY:SURFACE:MAG < 0.05.
+ 
+    //5. Return wheels to normal driving position.
+    AG1 OFF.
+    AG2 ON.
+    WAIT 5. // The time the program pauses while the wheels straighten out.
+    BRAKES OFF.
+
+    PRINT "Point-Turn complete. Resuming cruise.".
+}
