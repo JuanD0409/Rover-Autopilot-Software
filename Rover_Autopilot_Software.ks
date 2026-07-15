@@ -1,6 +1,6 @@
 // Rover Autopilot Software
 CLEARSCREEN.
-PRINT "=== ROVER AUTOPILOT INITIALIZED ==="
+PRINT "=== ROVER AUTOPILOT INITIALIZED ===".
 
 // Waypoint Scan Function
 LOCAL wpList is LIST().
@@ -11,7 +11,7 @@ FOR wp IN ALLWAYPOINTS() {
 }
 
 IF wpList:LENGTH = 0 {
-    PRINT "No active waypoint found in this planet.". // "Duna" was written above in order for the script to search exclusively for waypoints in Duna.
+    PRINT "No active waypoints found in this planet.". // "Duna" was written above in order for the script to search exclusively for waypoints in Duna.
     SET SHIP:CONTROL:WHEELTHROTTLE TO 0.
     BRAKES ON.
 }
@@ -34,7 +34,7 @@ LOCAL currentWP IS 0.
 UNTIL validChoise {
     PRINT "Enter the waypoint number to target: ".
     LOCAL userInput IS TERMINAL:INPUT:GETCHAR().
-    LOCAL userNum IS userInput:TONUMBER(-1). //Returns -1 is text is unvalid
+    LOCAL userNum IS userInput:TONUMBER(-1). //Returns -1 is text is invalid
     
     IF userNum >=0 AND userNum < wpList:LENGTH {
         SET currentWP TO wpList[userNum].
@@ -74,3 +74,19 @@ SET SHIP:CONTROL:WHEELSTEER TO 0.
 BRAKES ON.
 
 // Rover Functions:
+
+FUNCTION controlSpeed {
+    PARAMETER minSpeed, maxSpeed.
+    LOCAL currentSpeed IS SHIP:VELOCITY:SURFACE:MAG.
+
+    IF currentSpeed > maxSpeed {
+        BRAKES ON.
+        SET SHIP:CONTROL:WHEELTHROTTLE TO 0.
+    } ELSE IF currentSpeed < minSpeed {
+        BRAKES OFF.
+    SET SHIP:CONTROL:WHEELTHROTTLE TO 0.25 
+    } ELSE {
+        BRAKES OFF.
+        SET SHIP:CONTROL:WHEELTHROTTLE TO 0.1
+    }
+}
