@@ -130,3 +130,57 @@ FUNCTION executePointTurn {
 
     PRINT "Point-Turn complete. Resuming cruise.".
 }
+
+FUNCTION executeScienceSequence {
+    PRINT "Destination reached. Initiating science analysis...".
+    SET SHIP:CONTROL:WHEELTHROTTLE TO 0.
+    BRAKES ON.
+    WAIT UNTIL SHIP:VELOCITY:SURFACE:MAG < 0.05.
+
+    // Deploy Laser Camera
+    PRINT "Deploying Laser Camera...".
+    AG6 ON. // Remember to reset Kal-1000 after activation. Otherwise, the sequence will not work correctly.
+    WAIT 15.
+    
+    // Deploy Robotic Arm
+    PRINT "Deploying robotic arm...".
+    AG3 ON.
+    WAIT 90. //Adjust time based on the time the Kal-1000 deploy animation takes to finish.
+    
+    //Instrument Activation
+    PRINT "Analyzing local conditions...".
+    AG7 ON. // Set various scientific experiments to this action group.
+    WAIT 5. // Forces the program to wait 5 seconds while instruments acquire the readings.
+    PRINT "Analysis terminated.".
+    
+    // Sample Collection
+    PRINT "Drilling soil to collect sample...".
+    AG8 ON. // Set this action group to activate a drill that collects a sample.
+    WAIT 15. // Forces the program to wait while the sample is drilled.
+    PRINT "Sample acquired.".
+
+    // Sample Storage
+    PRINT "Storing sample...".
+    AG4 ON. // Set this action group to activate a Kal-1000 controller that moves the robotic arm in a way that appears as a NASA rover performing a sample collection. Also, place an Experiment Return Unit in your rover, and set it to collect all at the end of the Kal-1000 sequence.
+    WAIT 75. // Forces the program to wait while the robotic arm stores the sample.
+    
+    // Retract Robotic Arm.
+    PRINT "Retracting arm to rest position...".
+    AG5 ON. // Set this action group to activate another Kal-1000 controller that retracts the robotic arm for its sample storage position to its rest position.
+    WAIT 75. // Forces the program to wait until the robotic arm retracts safely to its rest/drive position.
+}
+
+PRINT "Science sequence terminated.".
+
+// Transmit all collected data back to Kerbin (Earth).
+FOR p IN SHIP:PARTS {
+    IF p:HASMODULE("ModuleScienceExperiment") {
+        LOCAL scienceModule IS p:GETMODULE("ModuleScienceExperiment").
+        IF scienceModule:HASDATA {
+            scienceModule:TRANSMIT().
+            WAIT 1. // 1 second delay to prevent transmission overlap.
+        }
+    }
+}
+PRINT "Data transmission complete.".
+// End of script
