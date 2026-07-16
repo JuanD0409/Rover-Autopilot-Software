@@ -93,15 +93,16 @@ FUNCTION controlSpeed {
 
 FUNCTION executePointTurn {
     PARAMETER targetGeo.
-
     PRINT "Heading error is greater than 5 degrees. Initiating point-turn...".
 
     // 1. Completely stop the rover.
     SET SHIP:CONTROL:WHEELTHROTTLE TO 0.
     BRAKES ON. 
-    WAIT UNTIL SHIP:VELOCITY:SURFACE:MAG < 0.05.
+    LOCAL stopTimeout IS TIME:SECONDS + 2. // Prevents getting stuck anywhere by adding a timeout command.
+    WAIT UNTIL (SHIP:VELOCITY:SURFACE:MAG < 0.05) OR (TIME:SECONDS > stopTimeout).
     
     // 2. Turn the front and rear wheels 45 degrees using robotic servos controlled by a Kal-1000 toggled by two action groups.
+    setWheelReverse("pivot_wheel", TRUE). // Set a tag to all wheels on the right side; if the rover throttles forward, it should turn right and vice versa.
     TOGGLE AG1. // Set action group 1 to set to normal play and activate the Kal-1000 that steers the wheels.
     WAIT 5. // The time the program pauses while the wheels turn can be changed.
     BRAKES OFF.
@@ -109,9 +110,9 @@ FUNCTION executePointTurn {
     // 3. Rotate the rover until it's aligned within 1 degree of target heading.
     UNTIL ABS(targetGeo:BEARING) < 1 {
         IF targetGeo:BEARING > 0 {
-            SET SHIP:CONTROL:WHEELTHROTTLE TO -0.5. // Rover turns right when throttling backward.
+            SET SHIP:CONTROL:WHEELTHROTTLE TO 0.5. // Rover turns right when throttling backward.
         } ELSE {
-            SET SHIP:CONTROL:WHEELTHROTTLE TO 0.5. // Rover turns left when throttling forward.
+            SET SHIP:CONTROL:WHEELTHROTTLE TO -0.5. // Rover turns left when throttling forward.
         }
         WAIT 0.05.
     }
@@ -119,9 +120,11 @@ FUNCTION executePointTurn {
     // 4. Stop the rover's rotation.
     SET SHIP:CONTROL:WHEELTHROTTLE TO 0.
     BRAKES ON.
-    WAIT UNTIL SHIP:VELOCITY:SURFACE:MAG < 0.05.
+    SET stopTimeout TO TIME:SECONDS + 2.
+    WAIT UNTIL (SHIP:VELOCITY:SURFACE:MAG < 0.05) OR (TIME:SECONDS > stopTimeout).
  
     //5. Return wheels to normal driving position.
+    setWheelReverse("pivot_wheel", FALSE). // Sets the previously reversed wheels back to normal.
     TOGGLE AG2. // Set this action group to make the same Kal-1000 as AG1 play in reverse, straightening the wheels to drive mode.
     WAIT 5. // The time the program pauses while the wheels straighten out.
     BRAKES OFF.
