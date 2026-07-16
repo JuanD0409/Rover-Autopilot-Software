@@ -84,10 +84,10 @@ FUNCTION controlSpeed {
         SET SHIP:CONTROL:WHEELTHROTTLE TO 0.
     } ELSE IF currentSpeed < minSpeed {
         BRAKES OFF.
-    SET SHIP:CONTROL:WHEELTHROTTLE TO 0.25 
+    SET SHIP:CONTROL:WHEELTHROTTLE TO 0.25. 
     } ELSE {
         BRAKES OFF.
-        SET SHIP:CONTROL:WHEELTHROTTLE TO 0.1
+        SET SHIP:CONTROL:WHEELTHROTTLE TO 0.1.
     }
 }
 
@@ -102,8 +102,7 @@ FUNCTION executePointTurn {
     WAIT UNTIL SHIP:VELOCITY:SURFACE:MAG < 0.05.
     
     // 2. Turn the front and rear wheels 45 degrees using robotic servos controlled by a Kal-1000 toggled by two action groups.
-    AG1 ON. // Set action group 1 to set to normal and activate the Kal-1000 that steers the wheels...
-    AG2 OFF. // and action group 2 to reverse the Kal-1000 activate it, returning the wheels to "drive mode".
+    TOGGLE AG1. // Set action group 1 to set to normal play and activate the Kal-1000 that steers the wheels.
     WAIT 5. // The time the program pauses while the wheels turn can be changed.
     BRAKES OFF.
 
@@ -123,8 +122,7 @@ FUNCTION executePointTurn {
     WAIT UNTIL SHIP:VELOCITY:SURFACE:MAG < 0.05.
  
     //5. Return wheels to normal driving position.
-    AG1 OFF.
-    AG2 ON.
+    TOGGLE AG2. // Set this action group to make the same Kal-1000 as AG1 play in reverse, straightening the wheels to drive mode.
     WAIT 5. // The time the program pauses while the wheels straighten out.
     BRAKES OFF.
 
@@ -139,34 +137,34 @@ FUNCTION executeScienceSequence {
 
     // Deploy Laser Camera
     PRINT "Deploying Laser Camera...".
-    AG6 ON. // Remember to reset Kal-1000 after activation. Otherwise, the sequence will not work correctly.
+    TOGGLE AG6. // Remember to reset Kal-1000 after activation. Otherwise, the sequence will not work correctly.
     WAIT 15.
     
     // Deploy Robotic Arm
     PRINT "Deploying robotic arm...".
-    AG3 ON.
+    TOGGLE AG3.
     WAIT 90. //Adjust time based on the time the Kal-1000 deploy animation takes to finish.
     
     //Instrument Activation
     PRINT "Analyzing local conditions...".
-    AG7 ON. // Set various scientific experiments to this action group.
+    TOGGLE AG7. // Set various scientific experiments to this action group.
     WAIT 5. // Forces the program to wait 5 seconds while instruments acquire the readings.
     PRINT "Analysis terminated.".
     
     // Sample Collection
     PRINT "Drilling soil to collect sample...".
-    AG8 ON. // Set this action group to activate a drill that collects a sample.
+    TOGGLE AG8. // Set this action group to activate a drill that collects a sample.
     WAIT 15. // Forces the program to wait while the sample is drilled.
     PRINT "Sample acquired.".
 
     // Sample Storage
     PRINT "Storing sample...".
-    AG4 ON. // Set this action group to activate a Kal-1000 controller that moves the robotic arm in a way that appears as a NASA rover performing a sample collection. Also, place an Experiment Return Unit in your rover, and set it to collect all at the end of the Kal-1000 sequence.
+    TOGGLE AG4. // Set this action group to activate a Kal-1000 controller that moves the robotic arm in a way that appears as a NASA rover performing a sample collection. Also, place an Experiment Return Unit in your rover, and set it to collect all at the end of the Kal-1000 sequence.
     WAIT 75. // Forces the program to wait while the robotic arm stores the sample.
     
     // Retract Robotic Arm.
     PRINT "Retracting arm to rest position...".
-    AG5 ON. // Set this action group to activate another Kal-1000 controller that retracts the robotic arm for its sample storage position to its rest position.
+    TOGGLE AG5. // Set this action group to activate another Kal-1000 controller that retracts the robotic arm for its sample storage position to its rest position.
     WAIT 75. // Forces the program to wait until the robotic arm retracts safely to its rest/drive position.
 }
 
