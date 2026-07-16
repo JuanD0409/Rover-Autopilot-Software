@@ -109,9 +109,9 @@ FUNCTION executePointTurn {
     // 3. Rotate the rover until it's aligned within 1 degree of target heading.
     UNTIL ABS(targetGeo:BEARING) < 1 {
         IF targetGeo:BEARING > 0 {
-            SET SHIP:CONTROL:WHEELTHROTTLE TO 0.5. // Rover spins clockwise
+            SET SHIP:CONTROL:WHEELTHROTTLE TO -0.5. // Rover turns right when throttling backward.
         } ELSE {
-            SET SHIP:CONTROL:WHEELTHROTTLE TO -0.5. // Rover spins counter-clockwise.
+            SET SHIP:CONTROL:WHEELTHROTTLE TO 0.5. // Rover turns left when throttling forward.
         }
         WAIT 0.05.
     }
@@ -134,14 +134,14 @@ FUNCTION setWheelReverse {
     
     LOCAL wheelList IS SHIP:PARTSTAGGED(tag).
     FOR w IN wheelList {
-        IF w:HASMODULE("ModuleWheelMotor"){
+        IF w:HASMODULE("ModuleWheelMotor") {
             LOCAL motor IS w:GETMODULE("ModuleWheelMotor").
             
             // Thorough search of all KSP modules for wheel motors.
             LOCAL fields IS LIST("invert direction", "direction inverted", "invert motor", "motor direction").
             FOR f IN fields {
-                IF motor:HASFIELD(f){
-                    IF f = "motor direction"{
+                IF motor:HASFIELD(f) {
+                    IF f = "motor direction" {
                         IF shouldReverse { motor:SETFIELD(f, "Inverted"). }
                         ELSE { motor:SETFIELD(f, "Normal"). }
                     } ELSE {
