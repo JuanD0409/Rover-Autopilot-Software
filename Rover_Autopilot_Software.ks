@@ -129,6 +129,30 @@ FUNCTION executePointTurn {
     PRINT "Point-Turn complete. Resuming cruise.".
 }
 
+FUNCTION setWheelReverse {
+    PARAMETER tag, shouldReverse. // shouldReverse is either true or false.
+    
+    LOCAL wheelList IS SHIP:PARTSTAGGED(tag).
+    FOR w IN wheelList {
+        IF w:HASMODULE("ModuleWheelMotor"){
+            LOCAL motor IS w:GETMODULE("ModuleWheelMotor").
+            
+            // Thorough search of all KSP modules for wheel motors.
+            LOCAL fields IS LIST("invert direction", "direction inverted", "invert motor", "motor direction").
+            FOR f IN fields {
+                IF motor:HASFIELD(f){
+                    IF f = "motor direction"{
+                        IF shouldReverse { motor:SETFIELD(f, "Inverted"). }
+                        ELSE { motor:SETFIELD(f, "Normal"). }
+                    } ELSE {
+                        motor:SETFIELD(f, shouldReverse).
+                    }
+                }
+            }
+        }
+    }
+}
+
 FUNCTION executeScienceSequence {
     PRINT "Destination reached. Initiating science analysis...".
     SET SHIP:CONTROL:WHEELTHROTTLE TO 0.
