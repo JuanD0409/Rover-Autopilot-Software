@@ -99,7 +99,7 @@ FUNCTION executePointTurn {
     SET SHIP:CONTROL:WHEELTHROTTLE TO 0.
     BRAKES ON. 
     LOCAL stopTimeout IS TIME:SECONDS + 2. // Prevents getting stuck anywhere by adding a timeout command.
-    WAIT UNTIL (SHIP:VELOCITY:SURFACE:MAG < 0.05) OR (TIME:SECONDS > stopTimeout).
+    WAIT UNTIL (SHIP:VELOCITY:SURFACE:MAG < 0.1) OR (TIME:SECONDS > stopTimeout).
     
     // 2. Turn the front and rear wheels 45 degrees using robotic servos controlled by a Kal-1000 toggled by two action groups.
     setWheelReverse("pivot_wheel", TRUE). // Set a tag to all wheels on the right side; if the rover throttles forward, it should turn right and vice versa.
@@ -121,7 +121,7 @@ FUNCTION executePointTurn {
     SET SHIP:CONTROL:WHEELTHROTTLE TO 0.
     BRAKES ON.
     SET stopTimeout TO TIME:SECONDS + 2.
-    WAIT UNTIL (SHIP:VELOCITY:SURFACE:MAG < 0.05) OR (TIME:SECONDS > stopTimeout).
+    WAIT UNTIL (SHIP:VELOCITY:SURFACE:MAG < 0.1) OR (TIME:SECONDS > stopTimeout).
  
     //5. Return wheels to normal driving position.
     setWheelReverse("pivot_wheel", FALSE). // Sets the previously reversed wheels back to normal.
@@ -134,24 +134,36 @@ FUNCTION executePointTurn {
 
 FUNCTION setWheelReverse {
     PARAMETER tag, shouldReverse. // shouldReverse is either true or false.
-    
     LOCAL wheelList IS SHIP:PARTSTAGGED(tag).
+    IF wheelList:LENGTH = 0 {
+        PRINT "WARNING: No tagged wheels were found." + tag.
+        RETURN.
+    }
     FOR w IN wheelList {
-        IF w:HASMODULE("ModuleWheelMotor") {
-            LOCAL motor IS w:GETMODULE("ModuleWheelMotor").
+        LOCAL foundMotor IS FALSE.
+        FOR motorName IN w:MODULES {
+            IF motorName:TOUPPER:CONTAINS("WHEEL") AND motorName:TOUPPER:CONTAINS("MOTOR") {
+                SET foundMotor TO TRUE.
+                LOCAL motor IS w:GETMODULE(motorName).
             
-            // Thorough search of all KSP modules for wheel motors.
-            LOCAL fields IS LIST("invert direction", "direction inverted", "invert motor", "motor direction").
-            FOR f IN fields {
-                IF motor:HASFIELD(f) {
-                    IF f = "motor direction" {
-                        IF shouldReverse { motor:SETFIELD(f, "Inverted"). }
-                        ELSE { motor:SETFIELD(f, "Normal"). }
-                    } ELSE {
-                        motor:SETFIELD(f, shouldReverse).
+                // Thorough search of all KSP modules for wheel motors.
+                LOCAL fields IS LIST("invert direction", "direction inverted", "invert motor", "motor direction", "isreversed").
+                FOR f IN fields {
+                    IF motor:HASFIELD(f) {
+                        IF f = "motor direction" {
+                            IF shouldReverse { motor:SETFIELD(f, "Inverted"). }
+                            ELSE { motor:SETFIELD(f, "Normal"). }
+                        } ELSE {
+                            motor:SETFIELD(f, shouldReverse).
+                        }   
                     }
                 }
-            }
+            }                       
+        }
+        
+        // Safety check: Are the parts tagged wheels?
+        IF NOT foundMotor {
+            PRINT "WARNING: Part " + w:NAME + " has tag " + tag + "but no motor module.".
         }
     }
 }
