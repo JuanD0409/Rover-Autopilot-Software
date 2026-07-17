@@ -89,7 +89,7 @@ FUNCTION controlSpeed {
        
         IF forwardSpeed > maxSpeed { 
             BRAKES ON. // Speed limit exceeded; apply brakes.
-            PRINT "Downhill detected: Braking..." AT (0, 10).
+            PRINT "Downhill Detected: Braking..." AT (0, 10).
         } ELSE {
             BRAKES OFF. // Safe speed; coast freely.
             PRINT "Downhill Detected: Coasting..." AT (0, 10). 
