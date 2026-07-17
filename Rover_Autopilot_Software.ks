@@ -77,17 +77,45 @@ BRAKES ON.
 
 FUNCTION controlSpeed {
     PARAMETER minSpeed, maxSpeed.
-    LOCAL currentSpeed IS SHIP:VELOCITY:SURFACE:MAG.
+    
+    // Vector calculations to detect slopes. Negative value means downhills. Positive value means uphills.
+    LOCAL surfaceSpeed IS VDOT(SHIP:VELOCITY:SURFACE, SHIP:FACING:FOREVECTOR).
+    LOCAL slopeAngle IS VDOT(SHIP:FACING:FOREVECTOR, SHIP:UP:VECTOR).
+    LOCAL isDownhill IS slopeAngle < -0.01. // Math threshold for downhills.
 
-    IF currentSpeed > maxSpeed {
-        BRAKES ON.
-        SET SHIP:CONTROL:WHEELTHROTTLE TO 0.
-    } ELSE IF currentSpeed < minSpeed {
-        BRAKES OFF.
-    SET SHIP:CONTROL:WHEELTHROTTLE TO 0.25. 
+    // Downhill mode
+    IF isDownhill {
+       SET SHIP:CONTROL:WHEELTHROTTLE TO 0. // Idles the wheels completely when going downhill.
+       
+        IF surfaceSpeed > maxSpeed { 
+            BRAKES ON. // Speed limit exceeded; apply brakes.
+            PRINT "Downhill detected: Braking...".
+        } ELSE {
+            BRAKES OFF. // Safe speed; coast freely.
+            PRINT "Downhill Detected: Coasting...". 
+        }
     } ELSE {
-        BRAKES OFF.
-        SET SHIP:CONTROL:WHEELTHROTTLE TO 0.1.
+        
+        // Plane/Uphill mode 
+        IF surfaceSpeed > maxSpeed {
+            BRAKES ON.
+            SET SHIP:CONTROL:WHEELTHROTTLE TO 0. // Idles wheels to make decelerating easier.
+            PRINT "Plane/Uphill: Speed limit exceeded. Braking...".
+        } ELSE IF surfaceSpeed < minSpeed {
+            BRAKES OFF.
+            
+            IF surfaceSpeed < 0 {
+                SET SHIP:CONTROL:WHEELTHROTTLE TO 1.0. // Sets maximum power mode to stop reversing on slope.
+                PRINT "WARNING: Slope Reverse detected. Recovering...".
+            } ELSE {
+                SET SHIP:CONTROL:WHEELTHROTTLE TO 0.8. // Increased power to climb slope easier.
+                PRINT "Uphill Detected: Increased power.".
+            }
+        } ELSE {
+            BRAKES OFF.
+            SET SHIP:CONTROL:WHEELTHROTTLE TO 0.2. // Normal cruise setting (can be changed according to rover power and mass).
+            PRINT "Normal Cruise enabled.".
+        }
     }
 }
 
