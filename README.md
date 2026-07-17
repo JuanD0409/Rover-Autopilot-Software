@@ -53,7 +53,7 @@ After a waypoint is found and targeted, the autopilot initiates its operating se
 
 ### Speed Control Function
 
-The rover's speed control function is designed to maintain its ground speed between 1.0 and 2.0 m/s. If its speed is lower than 1.0 m/s, it speeds up. If its speed is higher than 2.0 m/s, it applies the brakes. This function has this range for safety reasons, because the rover is completely autonomous and any unexpected event may result in a crash. The rover also is equipped with a smart slope-awareness function. It will idle the wheels and brake on downhills; speed up on uphill (and recover with max power if needed); or maintain cruise of a flat plane.
+The rover's speed control function is designed to maintain its ground speed between 1.0 and 2.0 m/s. If its speed is lower than 1.0 m/s, it speeds up. If its speed is higher than 2.0 m/s, it applies the brakes. This function has this range for safety reasons, because the rover is completely autonomous and any unexpected event may result in a crash. The rover also is equipped with a smart slope-awareness function. It will idle the wheels and brake on downhills; speed up on uphills (and recover with max power if needed); or maintain cruise on a flat plane.
 
 ### Wheel Reverse Function (Under development, test, and fix)
 
