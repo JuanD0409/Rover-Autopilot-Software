@@ -89,10 +89,10 @@ FUNCTION controlSpeed {
        
         IF forwardSpeed > maxSpeed { 
             BRAKES ON. // Speed limit exceeded; apply brakes.
-            PRINT "Downhill detected: Braking...".
+            PRINT "Downhill detected: Braking..." AT (0, 10).
         } ELSE {
             BRAKES OFF. // Safe speed; coast freely.
-            PRINT "Downhill Detected: Coasting...". 
+            PRINT "Downhill Detected: Coasting..." AT (0, 10). 
         }
     } ELSE {
         
@@ -100,21 +100,21 @@ FUNCTION controlSpeed {
         IF forwardSpeed > maxSpeed {
             BRAKES ON.
             SET SHIP:CONTROL:WHEELTHROTTLE TO 0. // Idles wheels to make decelerating easier.
-            PRINT "Plane/Uphill: Speed limit exceeded. Braking...".
+            PRINT "Plane/Uphill: Speed limit exceeded. Braking..." AT (0, 10).
         } ELSE IF forwardSpeed < minSpeed {
             BRAKES OFF.
             
             IF forwardSpeed < 0 {
                 SET SHIP:CONTROL:WHEELTHROTTLE TO 1.0. // Sets maximum power mode to stop reversing on slope.
-                PRINT "WARNING: Slope Reverse detected. Recovering...".
+                PRINT "WARNING: Slope Reverse detected. Recovering..." AT (0, 10).
             } ELSE {
                 SET SHIP:CONTROL:WHEELTHROTTLE TO 0.8. // Increased power to climb slope easier.
-                PRINT "Uphill Detected: Increased power.".
+                PRINT "Uphill Detected: Increased power." AT (0, 10).
             }
         } ELSE {
             BRAKES OFF.
             SET SHIP:CONTROL:WHEELTHROTTLE TO 0.2. // Normal cruise setting (can be changed according to rover power and mass).
-            PRINT "Normal Cruise enabled.".
+            PRINT "Normal Cruise enabled." AT (0, 10).
         }
     }
 }
