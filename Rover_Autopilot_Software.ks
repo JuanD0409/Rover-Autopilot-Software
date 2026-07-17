@@ -130,7 +130,6 @@ FUNCTION executePointTurn {
     WAIT UNTIL (SHIP:VELOCITY:SURFACE:MAG < 0.1) OR (TIME:SECONDS > stopTimeout).
     
     // 2. Turn the front and rear wheels 45 degrees using robotic servos controlled by a Kal-1000 toggled by two action groups.
-    setWheelReverse("pivot_wheel", TRUE). // Set a tag to all wheels on the right side; if the rover throttles forward, it should turn right and vice versa.
     TOGGLE AG1. // Set action group 1 to set to normal play and activate the Kal-1000 that steers the wheels.
     WAIT 5. // The time the program pauses while the wheels turn can be changed.
     BRAKES OFF.
@@ -152,7 +151,6 @@ FUNCTION executePointTurn {
     WAIT UNTIL (SHIP:VELOCITY:SURFACE:MAG < 0.1) OR (TIME:SECONDS > stopTimeout).
  
     //5. Return wheels to normal driving position.
-    setWheelReverse("pivot_wheel", FALSE). // Sets the previously reversed wheels back to normal.
     TOGGLE AG2. // Set this action group to make the same Kal-1000 as AG1 play in reverse, straightening the wheels to drive mode.
     WAIT 5. // The time the program pauses while the wheels straighten out.
     BRAKES OFF.
@@ -160,41 +158,7 @@ FUNCTION executePointTurn {
     PRINT "Point-Turn complete. Resuming cruise.".
 }
 
-FUNCTION setWheelReverse {
-    PARAMETER tag, shouldReverse. // shouldReverse is either true or false.
-    LOCAL wheelList IS SHIP:PARTSTAGGED(tag).
-    IF wheelList:LENGTH = 0 {
-        PRINT "WARNING: No tagged wheels were found." + tag.
-        RETURN.
-    }
-    FOR w IN wheelList {
-        LOCAL foundMotor IS FALSE.
-        FOR motorName IN w:MODULES {
-            IF motorName:TOUPPER:CONTAINS("WHEEL") AND motorName:TOUPPER:CONTAINS("MOTOR") {
-                SET foundMotor TO TRUE.
-                LOCAL motor IS w:GETMODULE(motorName).
-            
-                // Thorough search of all KSP modules for wheel motors.
-                LOCAL fields IS LIST("invert direction", "direction inverted", "invert motor", "motor direction", "isreversed").
-                FOR f IN fields {
-                    IF motor:HASFIELD(f) {
-                        IF f = "motor direction" {
-                            IF shouldReverse { motor:SETFIELD(f, "Inverted"). }
-                            ELSE { motor:SETFIELD(f, "Normal"). }
-                        } ELSE {
-                            motor:SETFIELD(f, shouldReverse).
-                        }   
-                    }
-                }
-            }                       
-        }
-        
-        // Safety check: Are the parts tagged wheels?
-        IF NOT foundMotor {
-            PRINT "WARNING: Part " + w:NAME + " has tag " + tag + "but no motor module.".
-        }
-    }
-}
+
 
 FUNCTION executeScienceSequence {
     PRINT "Destination reached. Initiating science analysis...".
