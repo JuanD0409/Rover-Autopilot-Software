@@ -29,7 +29,7 @@ A program, made in kOS (Kerboscript), to automatically navigate a rover, using w
 
 * Kerbal Space Program: v1.12.5.3190
 * Breaking Ground DLC: v1.7.1
-* kerbal Operation System: v1.6.0.1
+* kerbal Operating System: v1.6.0.1
 * Dependencies of each mod installed: latest compatible version
 
 ### Recommendations
@@ -92,4 +92,7 @@ The program's use is intended to be for controlling a NASA rover -such as Curios
 For adequate operation, the user's Kerbal Space Program install requires Breaking Ground DLC and the kerbal Operating System (kOS) mod (accompanied by the kOS for All! mod for kOS enabling on all probe cores). It is also recommended to have installed the latest version of all.
 
 ## Optional characteristics:
-* Robotic servos that steer the front and rear wheels 45 degrees towards the rover, Rocker-Bogie suspension for better handling under harsh terrain and slopes, large electricity reservoir and generator, and a robotic arm with various scientific instruments and a drill (included with Infernal Robotics-Next). 
+* Robotic servos that steer the front and rear wheels 45 degrees towards the rover
+* Rocker-Bogie suspension for better handling under harsh terrain and slopes
+* Large electricity reservoir and generator
+* Robotic arm with various scientific instruments and a drill (included with Infernal Robotics-Next). 
