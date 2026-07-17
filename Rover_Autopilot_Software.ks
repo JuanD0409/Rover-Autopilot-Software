@@ -123,7 +123,7 @@ FUNCTION executePointTurn {
     PARAMETER targetGeo.
     PRINT "Heading error is greater than 5 degrees. Initiating point-turn...".
 
-    // 1. Completely stop the rover.
+    // 1. Completely stop the rover and set wheel power for torque vectoring.
     SET SHIP:CONTROL:WHEELTHROTTLE TO 0.
     BRAKES ON. 
     LOCAL stopTimeout IS TIME:SECONDS + 2. // Prevents getting stuck anywhere by adding a timeout command.
@@ -133,13 +133,16 @@ FUNCTION executePointTurn {
     TOGGLE AG1. // Set action group 1 to set to normal play and activate the Kal-1000 that steers the wheels.
     WAIT 5. // The time the program pauses while the wheels turn can be changed.
     BRAKES OFF.
+    setWheelPower("left_wheel", 25).
+    setWheelPower("right_wheel", 50).
+    WAIT 0.5. 
 
     // 3. Rotate the rover until it's aligned within 1 degree of target heading.
     UNTIL ABS(targetGeo:BEARING) < 1 {
         IF targetGeo:BEARING > 0 {
-            SET SHIP:CONTROL:WHEELTHROTTLE TO 0.5. // Rover turns right when throttling backward.
+            SET SHIP:CONTROL:WHEELTHROTTLE TO -1.0. // Rover turns right when throttling backward.
         } ELSE {
-            SET SHIP:CONTROL:WHEELTHROTTLE TO -0.5. // Rover turns left when throttling forward.
+            SET SHIP:CONTROL:WHEELTHROTTLE TO 1.0. // Rover turns left when throttling forward.
         }
         WAIT 0.05.
     }
@@ -147,6 +150,8 @@ FUNCTION executePointTurn {
     // 4. Stop the rover's rotation.
     SET SHIP:CONTROL:WHEELTHROTTLE TO 0.
     BRAKES ON.
+    setWheelPower("left_wheel", 100).
+    setWheelPower("right_wheel", 100).
     SET stopTimeout TO TIME:SECONDS + 2.
     WAIT UNTIL (SHIP:VELOCITY:SURFACE:MAG < 0.1) OR (TIME:SECONDS > stopTimeout).
  
