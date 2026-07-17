@@ -55,7 +55,7 @@ UNTIL currentWP:GEOPOSITION:DISTANCE < 8 {
     LOCAL headingError TO targetGeo:BEARING.
 
     // Check if 360 degree turn is necessary.
-    IF ABS(headingError) > 10 {
+    IF ABS(headingError) > 5 {
         executePointTurn(targetGeo). 
     } ELSE {
         SET SHIP:CONTROL:WHEELSTEER TO -1 * (headingError / 20). // If 360 turn is not needed, activates normal steering.
