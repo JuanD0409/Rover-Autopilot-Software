@@ -79,7 +79,7 @@ FUNCTION controlSpeed {
     PARAMETER minSpeed, maxSpeed.
     
     // Vector calculations to detect slopes. Negative value means downhills. Positive value means uphills.
-    LOCAL surfaceSpeed IS VDOT(SHIP:VELOCITY:SURFACE, SHIP:FACING:FOREVECTOR).
+    LOCAL forwardSpeed IS VDOT(SHIP:VELOCITY:SURFACE, SHIP:FACING:FOREVECTOR).
     LOCAL slopeAngle IS VDOT(SHIP:FACING:FOREVECTOR, SHIP:UP:VECTOR).
     LOCAL isDownhill IS slopeAngle < -0.01. // Math threshold for downhills.
 
@@ -87,7 +87,7 @@ FUNCTION controlSpeed {
     IF isDownhill {
        SET SHIP:CONTROL:WHEELTHROTTLE TO 0. // Idles the wheels completely when going downhill.
        
-        IF surfaceSpeed > maxSpeed { 
+        IF forwardSpeed > maxSpeed { 
             BRAKES ON. // Speed limit exceeded; apply brakes.
             PRINT "Downhill detected: Braking...".
         } ELSE {
@@ -97,14 +97,14 @@ FUNCTION controlSpeed {
     } ELSE {
         
         // Plane/Uphill mode 
-        IF surfaceSpeed > maxSpeed {
+        IF forwardSpeed > maxSpeed {
             BRAKES ON.
             SET SHIP:CONTROL:WHEELTHROTTLE TO 0. // Idles wheels to make decelerating easier.
             PRINT "Plane/Uphill: Speed limit exceeded. Braking...".
-        } ELSE IF surfaceSpeed < minSpeed {
+        } ELSE IF forwardSpeed < minSpeed {
             BRAKES OFF.
             
-            IF surfaceSpeed < 0 {
+            IF forwardSpeed < 0 {
                 SET SHIP:CONTROL:WHEELTHROTTLE TO 1.0. // Sets maximum power mode to stop reversing on slope.
                 PRINT "WARNING: Slope Reverse detected. Recovering...".
             } ELSE {
