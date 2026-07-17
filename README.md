@@ -30,7 +30,7 @@ A program, made in kOS (Kerboscript), to automatically navigate a rover, using w
 * Kerbal Space Program: v1.12.5.3190
 * Breaking Ground DLC: v1.7.1
 * kerbal Operation System: v1.6.0.1
-*Dependencies of each mod installed: latest compatible version
+* Dependencies of each mod installed: latest compatible version
 
 ### Recommendations
 
