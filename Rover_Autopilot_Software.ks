@@ -158,7 +158,18 @@ FUNCTION executePointTurn {
     PRINT "Point-Turn complete. Resuming cruise.".
 }
 
-
+FUNCTION setWheelPower {
+    PARAMETER tag, powerPercent.
+    FOR P IN SHIP:PARTSTAGGED(tag) {
+        FOR m IN p:MODULES {
+            IF m:TOUPPER:CONTAINS("WHEEL") AND m:TOUPPER:CONTAINS("MOTOR") {
+                IF p:GETMODULE(m):HASFIELD("drive limiter") {
+                    p:GETMODULE(m):SETFIELD("drive limiter", powerPercent).
+                }
+            }
+        }
+    }
+}
 
 FUNCTION executeScienceSequence {
     PRINT "Destination reached. Initiating science analysis...".
