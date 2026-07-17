@@ -88,9 +88,6 @@ The program then searches for scientific modules on the rover that have data, an
 
 Once transmission is done, the program re-checks that the brakes are enabled and ends the sequence.
 
-The program's use is intended to be for controlling a NASA rover -such as Curiosity or Perseverance- in a completely autonomous way inside Kerbal Space Program.
-For adequate operation, the user's Kerbal Space Program install requires Breaking Ground DLC and the kerbal Operating System (kOS) mod (accompanied by the kOS for All! mod for kOS enabling on all probe cores). It is also recommended to have installed the latest version of all.
-
 ## Optional characteristics:
 * Robotic servos that steer the front and rear wheels 45 degrees towards the rover
 * Rocker-Bogie suspension for better handling under harsh terrain and slopes
