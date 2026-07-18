@@ -107,17 +107,17 @@ FUNCTION controlSpeed {
             IF forwardSpeed < 0 {
                 // Sets throttle to max to recover.
                 SET SHIP:CONTROL:WHEELTHROTTLE TO 1.0. 
-                PRINT "Slope slipping! Recovering forward..." AT (0, 12).
+                PRINT "Slope slipping! Recovering forward..." AT (0, 15).
             } ELSE {
                 // Regular uphill climb power adjustment
                 SET SHIP:CONTROL:WHEELTHROTTLE TO 0.8. 
-                PRINT "Climbing Hill: Increasing power" AT (0, 12).
+                PRINT "Climbing Hill: Increasing power  " AT (0, 12).
             }
         } ELSE {
             // Normal cruising
             BRAKES OFF.
             SET SHIP:CONTROL:WHEELTHROTTLE TO 0.2. 
-            PRINT "Normal Cruise Terrain: Stable" AT (0, 12).
+            PRINT "Normal Cruise Terrain: Stable    " AT (0, 12).
         }
     }
 }
@@ -167,6 +167,7 @@ FUNCTION executePointTurn {
 
     PRINT "                                                                    " AT (0, 10).
     PRINT "                                                                    " AT (0, 12).
+    PRINT "                                                                    " AT (0, 15).
 }
 
 FUNCTION setWheelPower {
