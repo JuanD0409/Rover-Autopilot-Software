@@ -10,7 +10,6 @@ A program, made in kOS (Kerboscript), to automatically navigate a rover, using w
 * Waypoint-based Navigation and Selection Menu
 * Point-Turn capability by Torque Vectoring
 * Speed and Heading Control
-* Wheel Motor Reversal
 * Scientific Analysis Sequence, and Automatic Data Transmission
 * Slope-Awareness and Maneuvering.
 
