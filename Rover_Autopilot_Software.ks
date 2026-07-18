@@ -155,15 +155,15 @@ FUNCTION executePointTurn {
     SET stopTimeout TO TIME:SECONDS + 2.
     WAIT UNTIL (SHIP:VELOCITY:SURFACE:MAG < 0.1) OR (TIME:SECONDS > stopTimeout).
     
-    PRINT "                                                               " AT (0, 10).
-    PRINT "                                                               " AT (0, 12).
-
     //5. Return wheels to normal driving position.
     TOGGLE AG2. // Set this action group to make the same Kal-1000 as AG1 play in reverse, straightening the wheels to drive mode.
     WAIT 5. // The time the program pauses while the wheels straighten out.
     BRAKES OFF.
 
     PRINT "Point-Turn complete. Resuming cruise.".
+
+    PRINT "                                                                    " AT (0, 10).
+    PRINT "                                                                    " AT (0, 12).
 }
 
 FUNCTION setWheelPower {
