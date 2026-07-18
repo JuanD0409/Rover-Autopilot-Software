@@ -10,7 +10,7 @@ A program, made in kOS (Kerboscript), to automatically navigate a rover, using w
 * Waypoint-based Navigation and Selection Menu
 * Point-Turn capability by Torque Vectoring
 * Speed and Heading Control
-* Scientific Analysis Sequence, and Automatic Data Transmission
+* Scientific Analysis Sequence and Automatic Data Transmission
 * Slope-Awareness and Maneuvering.
 
 ## Local Deployment Tutorial
@@ -28,12 +28,12 @@ A program, made in kOS (Kerboscript), to automatically navigate a rover, using w
 * Kerbal Space Program: v1.12.5.3190
 * Breaking Ground DLC: v1.7.1
 * kerbal Operating System: v1.6.0.1
-* Dependencies of each mod installed: latest compatible version
+* Dependencies of each mod installed: latest compatible version.
 
 ### Recommendations (as tested)
 
 * Infernal Robotics-Next: v3.1.22
-* kOS for All!: v0.0.5 (stable release) 
+* kOS for All!: v0.0.5 (stable release). 
 
 ## How the script works
 
@@ -52,10 +52,10 @@ This function has various aspects. These include performing analysis with a lase
 Once transmission is done, the program re-checks that the brakes are enabled and ends the sequence.
 
 ## Optional Rover Characteristics
-* Robotic servos that steer the front and rear wheels 45 degrees towards the rover (Recommended build with Infernal Robotics-Next)
-* Rocker-Bogie suspension for better handling under harsh terrain and slopes (Infernal Robotics-Next is required for this)
+* Robotic servos that steer the front and rear wheels 45 degrees towards the rover (Recommended build with Infernal Robotics-Next).
+* Rocker-Bogie suspension for better handling under harsh terrain and slopes (Infernal Robotics-Next is required for this).
 * Large electricity reservoir and generator
-* Robotic arm with various scientific instruments (Recommended build with Infernal Robotics-Next)
+* Robotic arm with various scientific instruments (Recommended build with Infernal Robotics-Next).
 * Sample drill and Laser Camera (included with Infernal Robotics-Next). 
 
 Note: The code will work without this characteristics. However, most Action Group activation, `WAIT`, and `PRINT` commands inside the `executeScienceSequence` should be deleted or marked as comments for correct functioning.
