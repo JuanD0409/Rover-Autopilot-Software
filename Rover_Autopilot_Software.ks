@@ -85,36 +85,39 @@ FUNCTION controlSpeed {
 
     // Downhill mode
     IF isDownhill {
-       SET SHIP:CONTROL:WHEELTHROTTLE TO 0. // Idles the wheels completely when going downhill.
-       
-        IF forwardSpeed > maxSpeed { 
-            BRAKES ON. // Speed limit exceeded; apply brakes.
+       SET SHIP:CONTROL:WHEELTHROTTLE TO 0. // Idle the motors completely
+        
+        IF forwardSpeed > maxSpeed {
+            BRAKES ON.  // Speeding! Apply brakes
             PRINT "Downhill Detected: Braking..." AT (0, 12).
         } ELSE {
-            BRAKES OFF. // Safe speed; coast freely.
-            PRINT "Downhill Detected: Coasting..." AT (0, 12). 
+            BRAKES OFF. // Safe speed, coast freely down the hill
+            PRINT "Downhill Detected: Coasting..." AT (0, 12).
         }
     } ELSE {
         
         // Plane/Uphill mode 
         IF forwardSpeed > maxSpeed {
             BRAKES ON.
-            SET SHIP:CONTROL:WHEELTHROTTLE TO 0. // Idles wheels to make decelerating easier.
-            PRINT "Plane/Uphill: Speed limit exceeded. Braking..." AT (0, 12).
+            SET SHIP:CONTROL:WHEELTHROTTLE TO 0.
+            PRINT "Flat/Uphill: Speed Limit Exceeded" AT (0, 12).
         } ELSE IF forwardSpeed < minSpeed {
             BRAKES OFF.
             
             IF forwardSpeed < 0 {
-                SET SHIP:CONTROL:WHEELTHROTTLE TO 1.0. // Sets maximum power mode to stop reversing on slope.
-                PRINT "WARNING: Slope Reverse detected. Recovering..." AT (0, 12).
+                // Sets throttle to max to recover.
+                SET SHIP:CONTROL:WHEELTHROTTLE TO 1.0. 
+                PRINT "Slope slipping! Recovering forward..." AT (0, 12).
             } ELSE {
-                SET SHIP:CONTROL:WHEELTHROTTLE TO 0.8. // Increased power to climb slope easier.
-                PRINT "Uphill Detected: Increased power." AT (0, 12).
+                // Regular uphill climb power adjustment
+                SET SHIP:CONTROL:WHEELTHROTTLE TO 0.8. 
+                PRINT "Climbing Hill: Increasing power" AT (0, 12).
             }
         } ELSE {
+            // Normal cruising
             BRAKES OFF.
-            SET SHIP:CONTROL:WHEELTHROTTLE TO 0.2. // Normal cruise setting (can be changed according to rover power and mass).
-            PRINT "Normal Cruise enabled." AT (0, 12).
+            SET SHIP:CONTROL:WHEELTHROTTLE TO 0.2. 
+            PRINT "Normal Cruise Terrain: Stable" AT (0, 12).
         }
     }
 }
