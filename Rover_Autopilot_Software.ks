@@ -96,9 +96,13 @@ FUNCTION controlSpeed {
         IF forwardSpeed > maxSpeed {
             BRAKES ON.  // Speeding! Apply brakes
             PRINT "Downhill Detected: Braking... " AT (0, 18).
+            PRINT "                                                                    " AT (0, 20).
+            PRINT "                                                                    " AT (0, 22).       
         } ELSE {
             BRAKES OFF. // Safe speed, coast freely down the hill
             PRINT "Downhill Detected: Coasting..." AT (0, 18).
+            PRINT "                                                                    " AT (0, 20).
+            PRINT "                                                                    " AT (0, 22).
         }
     } ELSE {
         
@@ -107,6 +111,7 @@ FUNCTION controlSpeed {
             BRAKES ON.
             SET SHIP:CONTROL:WHEELTHROTTLE TO 0.
             PRINT "Speed Limit Exceeded          " AT (0, 20).
+            PRINT "                                                                    " AT (0, 18).
         } ELSE IF forwardSpeed < minSpeed {
             BRAKES OFF.
             
@@ -114,16 +119,19 @@ FUNCTION controlSpeed {
                 // Sets throttle to max to recover.
                 SET SHIP:CONTROL:WHEELTHROTTLE TO 1.0. 
                 PRINT "Slope slipping! Recovering forward..." AT (0, 22).
+                PRINT "                                                                    " AT (0, 18).
             } ELSE {
                 // Regular uphill climb power adjustment
                 SET SHIP:CONTROL:WHEELTHROTTLE TO 0.8. 
                 PRINT "Climbing Hill: Increased power" AT (0, 20).
+                PRINT "                                                                    " AT (0, 18).
             }
         } ELSE {
             // Normal cruising
             BRAKES OFF.
-            SET SHIP:CONTROL:WHEELTHROTTLE TO 0.2. 
+            SET SHIP:CONTROL:WHEELTHROTTLE TO 0.1. 
             PRINT "Normal Terrain Cruise: Stable " AT (0, 20).
+            PRINT "                                                                    " AT (0, 18).
         }
     }
 }
@@ -149,9 +157,9 @@ FUNCTION executePointTurn {
     // 3. Rotate the rover until it's aligned within 1 degree of target heading.
     UNTIL ABS(targetGeo:BEARING) < 1 {
         IF targetGeo:BEARING > 0 {
-            SET SHIP:CONTROL:WHEELTHROTTLE TO 0.75. // Rover turns left when throttling forward.
+            SET SHIP:CONTROL:WHEELTHROTTLE TO 1.0. // Rover turns left when throttling forward.
         } ELSE {
-            SET SHIP:CONTROL:WHEELTHROTTLE TO -0.75. // Rover turns right when throttling backward.
+            SET SHIP:CONTROL:WHEELTHROTTLE TO -1.0. // Rover turns right when throttling backward.
         }
         WAIT 0.05.
     }
