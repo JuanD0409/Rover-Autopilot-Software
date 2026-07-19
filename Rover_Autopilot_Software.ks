@@ -50,10 +50,13 @@ PRINT "Activating Autopilot...".
 WAIT 3.
 
 //Main Autopilot Loop
-UNTIL currentWP:GEOPOSITION:DISTANCE < 8 {
+UNTIL currentWP:GEOPOSITION:DISTANCE < 1 {
     LOCAL targetGeo IS currentWP:GEOPOSITION.
     LOCAL headingError TO targetGeo:BEARING.
-
+    
+    // While UNTIL loop is active, updates remaining distance, current speed, and ETA.
+    displayArrivalTime(currentWP).
+    
     // Check if 360 degree turn is necessary.
     IF ABS(headingError) > 5 {
         executePointTurn(targetGeo). 
@@ -66,7 +69,7 @@ UNTIL currentWP:GEOPOSITION:DISTANCE < 8 {
 }
 
 // After destination is reached...
-//executeScienceSequence(). // Executes a list of commands (found below) to analyze multiple things with cameras, a robotic arm, and other instruments.
+executeScienceSequence(). // Executes a list of commands (found below) to analyze multiple things with a laser camera, a robotic arm, and other instruments.
 
 PRINT "=== MISSION COMPLETE ===".
 SET SHIP:CONTROL:WHEELTHROTTLE TO 0.
