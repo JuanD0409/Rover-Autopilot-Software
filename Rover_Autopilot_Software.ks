@@ -89,10 +89,10 @@ FUNCTION controlSpeed {
         
         IF forwardSpeed > maxSpeed {
             BRAKES ON.  // Speeding! Apply brakes
-            PRINT "Downhill Detected: Braking..." AT (0, 12).
+            PRINT "Downhill Detected: Braking... " AT (0, 11).
         } ELSE {
             BRAKES OFF. // Safe speed, coast freely down the hill
-            PRINT "Downhill Detected: Coasting..." AT (0, 12).
+            PRINT "Downhill Detected: Coasting..." AT (0, 11).
         }
     } ELSE {
         
@@ -166,6 +166,7 @@ FUNCTION executePointTurn {
     PRINT "Point-Turn complete. Resuming cruise.".
 
     PRINT "                                                                    " AT (0, 10).
+    PRINT "                                                                    " AT (0, 11).
     PRINT "                                                                    " AT (0, 12).
     PRINT "                                                                    " AT (0, 15).
 }
@@ -235,4 +236,35 @@ FOR p IN SHIP:PARTS {
     }
 }
 PRINT "Data transmission complete.".
+
+FUNCTION displayArrivalTime {
+    PARAMETER targetGeo.
+
+    // 1. Calculate distance in meters and speed in m/s.
+    LOCAL distance IS targetGeo:DISTANCE.
+    LOCAL speed IS SHIP:VELOCITY:SURFACE:MAG.
+    LOCAL etaString IS "".
+
+    // 2. Safeguard: Only calculate ETA if rover is moving over 0.2 m/s to avoid division by 0.
+    IF speed > 0.2 {
+        LOCAL totalSeconds IS distance / speed.
+        LOCAL minutes IS FLOOR(totalSeconds / 60).
+        LOCAL seconds is FLOOR(totalSeconds - (minutes * 60)).
+        LOCAL secString IS "" + seconds.
+        IF seconds < 10 { SET secString TO "0" + seconds. }
+        SET etaString TO minutes + "m " + secString + "s".
+    } ELSE {
+        SET etaString TO "N/A Rover Stopped".
+    }
+
+    // 3. Print coded UI on terminal.
+    PRINT "=======================================" AT (0, 19).
+    PRINT "            NAVIGATION DATA            " AT (0, 20).
+    PRINT "=======================================" AT (0, 21). 
+    PRINT " Distance to Waypoint: " + ROUND(distance, 1) + " m      " AT (0, 22).
+    PRINT " Current Ground Speed: " + ROUND(speed, 1) + " m/s    " AT (0, 23).
+    PRINT " Estimated Arrival On: " + etaString + "            " AT (0, 24).
+    PRINT "=======================================" AT (0, 25).
+}
+
 // End of script
