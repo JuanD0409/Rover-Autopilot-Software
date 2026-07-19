@@ -58,4 +58,4 @@ Once transmission is done, the program re-checks that the brakes are enabled and
 * Robotic arm with various scientific instruments (Recommended build with Infernal Robotics-Next).
 * Sample drill and Laser Camera (included with Infernal Robotics-Next). 
 
-Note: The code will work without this characteristics. However, most Action Group activation, `WAIT`, and `PRINT` commands inside the `executeScienceSequence` should be deleted or marked as comments for correct functioning.
+Note: The code will work without this characteristics (except for the electricity reserves). However, most Action Group activation, `WAIT`, and `PRINT` commands inside the `executeScienceSequence` function should be deleted or marked as comments for correct functioning.
