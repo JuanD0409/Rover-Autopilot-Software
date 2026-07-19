@@ -71,6 +71,9 @@ UNTIL currentWP:GEOPOSITION:DISTANCE < 1 {
 // After destination is reached...
 executeScienceSequence(). // Executes a list of commands (found below) to analyze multiple things with a laser camera, a robotic arm, and other instruments.
 
+PRINT "                                                                    " AT (0, 18).
+PRINT "                                                                    " AT (0, 20).
+PRINT "                                                                    " AT (0, 22).
 PRINT "=== MISSION COMPLETE ===".
 SET SHIP:CONTROL:WHEELTHROTTLE TO 0.
 SET SHIP:CONTROL:WHEELSTEER TO 0.
@@ -92,10 +95,10 @@ FUNCTION controlSpeed {
         
         IF forwardSpeed > maxSpeed {
             BRAKES ON.  // Speeding! Apply brakes
-            PRINT "Downhill Detected: Braking... " AT (0, 11).
+            PRINT "Downhill Detected: Braking... " AT (0, 18).
         } ELSE {
             BRAKES OFF. // Safe speed, coast freely down the hill
-            PRINT "Downhill Detected: Coasting..." AT (0, 11).
+            PRINT "Downhill Detected: Coasting..." AT (0, 18).
         }
     } ELSE {
         
@@ -103,31 +106,31 @@ FUNCTION controlSpeed {
         IF forwardSpeed > maxSpeed {
             BRAKES ON.
             SET SHIP:CONTROL:WHEELTHROTTLE TO 0.
-            PRINT "Flat/Uphill: Speed Limit Exceeded" AT (0, 12).
+            PRINT "Speed Limit Exceeded          " AT (0, 20).
         } ELSE IF forwardSpeed < minSpeed {
             BRAKES OFF.
             
             IF forwardSpeed < 0 {
                 // Sets throttle to max to recover.
                 SET SHIP:CONTROL:WHEELTHROTTLE TO 1.0. 
-                PRINT "Slope slipping! Recovering forward..." AT (0, 15).
+                PRINT "Slope slipping! Recovering forward..." AT (0, 22).
             } ELSE {
                 // Regular uphill climb power adjustment
                 SET SHIP:CONTROL:WHEELTHROTTLE TO 0.8. 
-                PRINT "Climbing Hill: Increasing power  " AT (0, 12).
+                PRINT "Climbing Hill: Increased power" AT (0, 20).
             }
         } ELSE {
             // Normal cruising
             BRAKES OFF.
             SET SHIP:CONTROL:WHEELTHROTTLE TO 0.2. 
-            PRINT "Normal Cruise Terrain: Stable    " AT (0, 12).
+            PRINT "Normal Terrain Cruise: Stable " AT (0, 20).
         }
     }
 }
 
 FUNCTION executePointTurn {
     PARAMETER targetGeo.
-    PRINT "Heading error is greater than 5 degrees. Initiating point-turn..." AT (0, 10).
+    PRINT "Heading error is greater than 5 degrees. Initiating point-turn..." AT (0, 16).
 
     // 1. Completely stop the rover and set wheel power for torque vectoring.
     SET SHIP:CONTROL:WHEELTHROTTLE TO 0.
@@ -160,18 +163,14 @@ FUNCTION executePointTurn {
     setWheelPower("right_wheel", 100).
     SET stopTimeout TO TIME:SECONDS + 2.
     WAIT UNTIL (SHIP:VELOCITY:SURFACE:MAG < 0.1) OR (TIME:SECONDS > stopTimeout).
+    PRINT "Point-Turn complete. Resuming cruise.                            " AT (0, 16).
     
     //5. Return wheels to normal driving position.
     TOGGLE AG2. // Set this action group to make the same Kal-1000 as AG1 play in reverse, straightening the wheels to drive mode.
     WAIT 5. // The time the program pauses while the wheels straighten out.
     BRAKES OFF.
 
-    PRINT "Point-Turn complete. Resuming cruise.".
-
-    PRINT "                                                                    " AT (0, 10).
-    PRINT "                                                                    " AT (0, 11).
-    PRINT "                                                                    " AT (0, 12).
-    PRINT "                                                                    " AT (0, 15).
+    PRINT "                                                                      " AT (0, 16).
 }
 
 FUNCTION setWheelPower {
@@ -188,45 +187,45 @@ FUNCTION setWheelPower {
 }
 
 FUNCTION executeScienceSequence {
-    PRINT "Destination reached. Initiating science analysis...".
+    PRINT "Initiating science analysis..." AT (0, 14).
     SET SHIP:CONTROL:WHEELTHROTTLE TO 0.
     BRAKES ON.
     WAIT UNTIL SHIP:VELOCITY:SURFACE:MAG < 0.05.
 
     // Deploy Laser Camera
-    PRINT "Deploying Laser Camera...".
+    PRINT "Deploying Laser Camera...     " AT (0, 14).
     TOGGLE AG6. // Remember to reset Kal-1000 after activation. Otherwise, the sequence will not work correctly.
     WAIT 15.
     
     // Deploy Robotic Arm
-    PRINT "Deploying robotic arm...".
+    PRINT "Deploying robotic arm...      " AT (0, 14).
     TOGGLE AG3.
     WAIT 90. //Adjust time based on the time the Kal-1000 deploy animation takes to finish.
     
     //Instrument Activation
-    PRINT "Analyzing local conditions...".
+    PRINT "Analyzing local conditions... " AT (0, 14).
     TOGGLE AG7. // Set various scientific experiments to this action group.
     WAIT 5. // Forces the program to wait 5 seconds while instruments acquire the readings.
-    PRINT "Analysis terminated.".
+    PRINT "Analysis terminated.          " AT (0, 14).
     
     // Sample Collection
-    PRINT "Drilling soil to collect sample...".
+    PRINT "Collecting sample...          " AT (0, 14).
     TOGGLE AG8. // Set this action group to activate a drill that collects a sample.
     WAIT 15. // Forces the program to wait while the sample is drilled.
-    PRINT "Sample acquired.".
+    PRINT "Sample acquired.              " AT (0, 14).
 
     // Sample Storage
-    PRINT "Storing sample...".
+    PRINT "Storing sample...             " AT (0, 14).
     TOGGLE AG4. // Set this action group to activate a Kal-1000 controller that moves the robotic arm in a way that appears as a NASA rover performing a sample collection. Also, place an Experiment Return Unit in your rover, and set it to collect all at the end of the Kal-1000 sequence.
     WAIT 75. // Forces the program to wait while the robotic arm stores the sample.
     
     // Retract Robotic Arm.
-    PRINT "Retracting arm to rest position...".
+    PRINT "Retracting robotic arm...     " AT (0, 14).
     TOGGLE AG5. // Set this action group to activate another Kal-1000 controller that retracts the robotic arm for its sample storage position to its rest position.
     WAIT 75. // Forces the program to wait until the robotic arm retracts safely to its rest/drive position.
 }
 
-PRINT "Science sequence terminated.".
+PRINT "Science sequence terminated.  " AT (0, 14).
 
 // Transmit all collected data back to Kerbin (Earth).
 FOR p IN SHIP:PARTS {
@@ -239,7 +238,7 @@ FOR p IN SHIP:PARTS {
     }
 }
 PRINT "Data transmission complete.".
-
+PRINT "                                   " AT (0, 14).
 FUNCTION displayArrivalTime {
     PARAMETER targetGeo.
 
@@ -261,13 +260,13 @@ FUNCTION displayArrivalTime {
     }
 
     // 3. Print coded UI on terminal.
-    PRINT "=======================================" AT (0, 19).
-    PRINT "            NAVIGATION DATA            " AT (0, 20).
-    PRINT "=======================================" AT (0, 21). 
-    PRINT " Distance to Waypoint: " + ROUND(distance, 1) + " m      " AT (0, 22).
-    PRINT " Current Ground Speed: " + ROUND(speed, 1) + " m/s    " AT (0, 23).
-    PRINT " Estimated Arrival On: " + etaString + "            " AT (0, 24).
-    PRINT "=======================================" AT (0, 25).
+    PRINT "=======================================" AT (0, 24).
+    PRINT "            NAVIGATION DATA            " AT (0, 25).
+    PRINT "=======================================" AT (0, 26). 
+    PRINT " Distance to Waypoint: " + ROUND(distance, 1) + " m      " AT (0, 27).
+    PRINT " Current Ground Speed: " + ROUND(speed, 1) + " m/s    " AT (0, 28).
+    PRINT " Estimated Arrival On: " + etaString + "            " AT (0, 29).
+    PRINT "=======================================" AT (0, 30).
 }
 
 // End of script
