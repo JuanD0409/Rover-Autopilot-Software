@@ -12,6 +12,7 @@ A program, made in kOS (Kerboscript), to automatically navigate a rover, using w
 * Speed and Heading Control
 * Scientific Analysis Sequence and Automatic Data Transmission
 * Slope-Awareness and Maneuvering
+* Distance, Speed, and ETA Calculator and Display
 
 ## Local Deployment Tutorial
 
@@ -39,7 +40,7 @@ A program, made in kOS (Kerboscript), to automatically navigate a rover, using w
 
 ### Navigation
 
-The program first scans the planet for all waypoints found; if there are none, a message saying "No waypoints found on this planet." appears on the terminal. If at least one is found, a list appears on the terminal asking the user to select the number (from 0-9) of the waypoint that wants to be reached. After targeting the waypoint, the rover initiates its autopilot script. The main control loop constantly evaluates if the rover is within a 1-meter range of the targeted waypoint and constantly corrects itself using normal steering. When the rover reaches the target waypoint, it will shut down the main control loop and brake until completely stopping. If the target heading is 5 degrees away or more from the rover's current heading, it will initiate a point-turn sequence that turns the front and rear wheels 45 degrees toward the rover and rotate on its place all the way to the target heading. Once the point-turn is completed, the rover returns the wheels to normal and starts driving. The rover's speed control function has a limiter range between 1.0 and 2.0 m/s, for safety reasons. It is also equipped with a smart slope-awareness function that determines and actuates upon the following conditions:
+The program first scans the planet for waypoints; if none are found, a message saying "No waypoints found on this planet." appears on the terminal. If at least one is found, a list appears on the terminal asking the user to select the number (from 0-9) of the waypoint that wants to be reached. After targeting the waypoint, the rover initiates its autopilot script. The main control loop constantly executes until the rover is within a 1-meter range of the targeted waypoint and corrects itself using normal steering. Additionally, the program shows a coded UI displaying data like remaining distance to target, current ground speed, and estimated arrival time; and continuously updates those values until the target waypoint is reached. When the rover reaches the target waypoint, it will shut down the main control loop and brake until completely stopping. If the target heading is 5 degrees away or more from the rover's current heading, it will initiate a point-turn sequence that turns the front and rear wheels 45 degrees toward the rover and rotate it on its place all the way to the target heading. Once the point-turn is completed, the rover returns the wheels to normal and starts driving. The rover's speed control function has a limiter range between 1.0 and 2.0 m/s, for safety reasons. It is also equipped with a smart slope-awareness function that determines and actuates upon the following conditions:
 
 * Flat Area: Maintains cruise speed between range
 * Uphill: Increases power (or maximum power if starting to reverse)
