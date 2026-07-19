@@ -244,7 +244,7 @@ FUNCTION displayArrivalTime {
     PARAMETER targetGeo.
 
     // 1. Calculate distance in meters and speed in m/s.
-    LOCAL distance IS targetGeo:DISTANCE.
+    LOCAL distance IS targetGeo:GEOPOSITION:DISTANCE.
     LOCAL speed IS SHIP:VELOCITY:SURFACE:MAG.
     LOCAL etaString IS "".
 
