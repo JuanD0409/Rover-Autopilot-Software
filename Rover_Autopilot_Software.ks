@@ -157,9 +157,9 @@ FUNCTION executePointTurn {
     // 3. Rotate the rover until it's aligned within 1 degree of target heading.
     UNTIL ABS(targetGeo:BEARING) < 1 {
         IF targetGeo:BEARING > 0 {
-            SET SHIP:CONTROL:WHEELTHROTTLE TO 0.5. // Rover turns left when throttling forward.
+            SET SHIP:CONTROL:WHEELTHROTTLE TO 0.3. // Rover turns left when throttling forward.
         } ELSE {
-            SET SHIP:CONTROL:WHEELTHROTTLE TO -0.5. // Rover turns right when throttling backward.
+            SET SHIP:CONTROL:WHEELTHROTTLE TO -0.3. // Rover turns right when throttling backward.
         }
         WAIT 0.05.
     }
