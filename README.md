@@ -34,7 +34,7 @@ Note: The code will work without this characteristics. However, most Action Grou
 * kerbal Operating System (kOS): v1.6.0.1.
 * kOS's Dependencies: latest compatible version.
 
-Notes: Any kOS version provides KerboScript compatibility; main difference between versions is syntax for commands. The code will work without these mods. However they are strongly recommended for better integration.
+Notes: Any kOS version provides KerboScript compatibility; main difference between versions is syntax for commands.
 
 ### Additional Mod Recommendations (as tested)
 
@@ -43,6 +43,8 @@ Notes: Any kOS version provides KerboScript compatibility; main difference betwe
 * kOS for All!: v0.0.5 (stable release)
 * Neptune Camera v4.3 
 * Dependencies of mods installed: latest compatible version.
+
+Note: The code will work without these mods. However they are strongly recommended for better integration and overall experience.
 
 ### Required Rover Characteristics
 * kOS computer (kOS for All! enables the mod in any probe core).
