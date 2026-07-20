@@ -1,5 +1,9 @@
 # Rover-Autopilot-Software
-A program, made in kOS (Kerboscript), to automatically navigate a rover, using waypoints, in KSP.
+A program, made in kOS (Kerboscript), to automatically navigate a rover, using waypoints, in Kerbal Space Program.
+
+<img width="512" height="512" alt="rover-selfie" src="https://github.com/user-attachments/assets/95b7ea34-a8b7-4ea4-80f9-521446e4d360" />
+
+Image of the test rover (based on NASA's Curiosity MSL) taken by a camera on the robotic arm.
 
 ## Quick Start guide
 1. While controlling the rover you want to automate, open the kOS terminal and type the command `EDIT rover.script.` This will open a window below the terminal to edit the code.
