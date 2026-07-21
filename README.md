@@ -5,6 +5,13 @@ A program, made in kOS (Kerboscript), to automatically navigate a rover, using w
 
 Image of the test rover (based on NASA's Curiosity MSL) taken by a camera on the robotic arm.
 
+The demo is a youtube video showing the program in action maneuvering the rover autonomously using all of its integrated functions.
+
+See the program in action:
+[![Youtube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=s8wuwD15yZE)
+
+Note: A normal demo is not possible since there is no way to run the code in any normal interpreter. The code has to be run in the kOS terminal inside Kerbal Space Program.
+
 ## Quick Start guide
 1. While controlling the rover you want to automate, open the kOS terminal and type the command `EDIT rover.script.` This will open a window below the terminal to edit the code.
 2. Copy the code on the "Rover_Autopilot_Software.ks" file, paste it to the window below the terminal, and click on the "save" button on that same window. The terminal should confirm that the changes were saved correctly.
